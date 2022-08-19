@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Upcoming Meetings</title>
+    <link rel="stylesheet" href="BaseStyle.css">
+
+    <style>
+        input {
+            float: right;
+        }
+
+        textarea {
+            resize: none;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h5 {
+            text-align: center;
+        }
+
+        tr {
+            height: 75%;
+        }
+
+        td {
+
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 0px 0px;
+            grid-auto-flow: row;
+            grid-template-areas:
+                "Basic-Meeting-Info Meeting-Topics Approved-Speakers"
+                ". . ."
+                ". . .";
+        }
+
+        .Basic-Meeting-Info {
+            grid-area: Basic-Meeting-Info;
+        }
+
+        .Meeting-Topics {
+            grid-area: Meeting-Topics;
+        }
+
+        .Approved-Speakers {
+            grid-area: Approved-Speakers;
+        }
+
+        table {
+            width: 100%;
+            position: absolute;
+            top: 62%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            /* border: 1px solid; */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- This part is uniform across all pages -->
+    <header class="header">
+        <h1>Welcome to "City Name"</h1>
+        <h2>Home <br> of the <br> "Something"</h2>
+    </header>
+
+    <div class="navbar">
+        <a href="Project1MainPage.html">Home</a>
+        <a href="SubmitComplaint.html">Report a Complaint</a>
+        <a href=ScheduledMeetingsPage.html>Attend a meeting</a>
+
+        <div class="dropdown">
+            <button class="dropbtn">Council Work
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+            </div>
+        </div>
+        <a href="LoginPage.html">Login</a>
+    </div>
+
+    <!-- end of uniform portion -->
+
+
+    <button id="createMeetingBtn" onclick="ShowForm()">Create new Meeting</button>
+    <button id="backToMainListBtn" onclick=" GetAllMeetings(); HideSpecific();">Back to Meeting List</button>
+    <form id="meetingForm">
+        <fieldset>
+            <legend>Create new Meeting</legend>
+            <br>
+            <label for="dateInput">Date</label>
+            <input type="datetime-local" id="dateInput">
+
+            <br><br>
+
+            <label for="addressInput">Address</label>
+            <input type="text" id="addressInput">
+
+            <h5>Summary</h5>
+            <textarea name="summary_Text" id="summaryInput"></textarea>
+
+            <br>
+            <button id="submitBtn" onclick="CreateMeetingButton()">Create Meeting</button>
+            <button id="cancelBtn" onclick="HideForm()">Cancel</button>
+        </fieldset>
+    </form>
+
+    <!-- table of all meetings from GetAllMeetings() -->
+    <table class="center" id="meetingTable">
+        <thead>
+
+            <tr>
+                <th>Address</th>
+                <th>Scheduled Date</th>
+                <!-- <th>Summary</th> -->
+                <th>View meeting</th>
+            </tr>
+
+
+        </thead>
+        <tbody id="meetingList">
+        </tbody>
+    </table>
+
+
+
+    <!-- table of a specific meeting when clicking "view" button -->
+    <table class="center" id="specificMeetingTable">
+        <thead>
+
+            <tr>
+                <th>Basic Info</th>
+                <th>Topics Covered</th>
+                <th>Approved Speakers</th>
+            </tr>
+
+        </thead>
+        <tbody id="specificInfo">
+        </tbody>
+
+    </table>
+
+    <!-- <div class="container">
+        <div class="Basic-Meeting-Info">
+            <h3 id="basicInfo">Scheduled</h3>
+        </div>
+        <div class="Meeting-Topics">
+            <p>topics covered</p>
+        </div>
+        <div class="Approved-Speakers"></div>
+    </div> -->
+
+    <!-- <div id="specificMeetingContainer">
+        
+        - <h3 id="addInfo">Address</h3>  -->
+    <!-- <h3 id="sumInfo">Summary</h3>   -->
+</body>
+
+
+<script>
+
+    const meetingTable = document.getElementById("meetingTable");
+    const description = document.getElementById("meetingList");
+
+    const createMeetingButton = document.getElementById("createMeetingBtn")
+    const backToMainListBtn = document.getElementById("backToMainListBtn");
+    const meetingForm = document.getElementById("meetingForm");
+    const submitNewMeetingBtn = document.getElementById("submitBtn");
+    const specificMeetingTable = document.getElementById("specificMeetingTable");
+    const specificInfo = document.getElementById("specificInfo");
+
+
+    const basicInfo = document.getElementById("basicInfo");
+    const addInfo = document.getElementById("addInfo");
+    const sumInfo = document.getElementById("sumInfo");
+
+    // submit meeting button here
+    document.addEventListener("submit", async event => {
+        event.preventDefault();
+    });
+
+
+    async function CreateMeetingButton() {
+        // create meeting
+        await CreateMeeting();
+
+        HideForm();
+
+        // refresh meeting display
+        ClearTables();
+        GetAllMeetings();
+    }
+
+    function ClearTables() {
+        description.innerText = "";
+        specificInfo.innerText = "";
+    }
+
+    function ShowSpecific() {
+        // show specific
+        specificMeetingTable.setAttribute("style", "display: table");
+        backToMainListBtn.setAttribute("style", "display:block");
+
+        // Hide Rest
+        createMeetingButton.setAttribute("style", "display: none;");
+        meetingTable.setAttribute("style", "display: none");
+    }
+
+    function HideSpecific() {
+        // hide specific
+        specificMeetingTable.setAttribute("style", "display: none");
+        backToMainListBtn.setAttribute("style", "display: none");
+
+        // show default
+        createMeetingButton.setAttribute("style", "display: block");
+        meetingTable.setAttribute("style", "display: table");
+    }
+
+    function ShowForm() {
+        // show form
+        meetingForm.setAttribute("style", "display: block;");
+
+        // Hide Rest
+        createMeetingButton.setAttribute("style", "display: none;");
+        meetingTable.setAttribute("style", "display: none");
+    }
+
+    function HideForm() {
+        // hide form
+        meetingForm.setAttribute("style", "display: none");
+
+        // show rest
+        createMeetingButton.setAttribute("style", "display: block");
+        meetingTable.setAttribute("style", "display: table");
+    }
+
+    async function CreateMeeting() {
+        const dateInput = document.getElementById("dateInput");
+        const addressInput = document.getElementById("addressInput");
+        const summaryInput = document.getElementById("summaryInput");
+
+        let myDate = new Date(dateInput.value);
+        console.log("my date " + myDate);
+        let epochDate = myDate.getTime() / 1000.0;
+        console.log("Epoch date: " + epochDate);
+        const newMeeting = { scheduledDate: epochDate, address: addressInput.value, summary: summaryInput.value };
+        const response = await fetch("http://localhost:8080/meetings",
+            {
+                method: "POST",
+                body: JSON.stringify(newMeeting),
+                headers:
+                {
+                    "Content-Type": "application/json"
+                }
+            });
+
+        if (response.status === 201) {
+            // ok
+            alert("Meeting submitted");
+            // later send user to a "Thank you" page that links back to the main site, rather than keep them on the complaint submission form.
+        }
+        else {
+            alert("Something went wrong");
+        }
+    }
+
+    async function GetAllMeetings() {
+
+        let requestString = "http://localhost:8080/meetings";
+
+        const response = await fetch(requestString);
+
+        const meetings = await response.json();
+
+        console.log(meetings);
+
+        if (response.status === 200) {
+            for (meeting of meetings) {
+                console.log(meeting.address);
+
+                const meetingRow = document.createElement("tr");
+
+                const date = document.createElement("td");
+                epochDate = new Date(meeting.scheduledDate * 1000);
+                date.innerText = epochDate.toLocaleString();
+
+                const address = document.createElement("td");
+                address.innerText = meeting.address;
+
+                // const summary = document.createElement('td');
+                // summary.innerText = meeting.summary;
+
+                const button = document.createElement('button');
+
+                button.dataset.meetingID = meeting.id;  // .dataset lets you get/set properties on the button.
+                button.innerText = "View";              // text on the button
+                button.addEventListener('click', async buttonClicked => {
+
+                    await ViewMeeting(buttonClicked.target.dataset.meetingID);
+
+                });
+
+                meetingRow.appendChild(address);
+                meetingRow.appendChild(date);
+                // meetingRow.appendChild(summary);
+                meetingRow.appendChild(button);
+
+                description.appendChild(meetingRow);
+            }
+        }
+        else {
+            alert("Something went wrong");
+        }
+    }
+
+    async function ViewMeeting(meetingID) {
+        console.log("viewing meeting " + meetingID);
+
+
+        let requestString = `http://localhost:8080/meetings/`;
+
+        requestString += meetingID;
+
+        console.log(requestString);
+        const response = await fetch(requestString);
+
+        const meeting = await response.json();
+
+        console.log(meeting);
+
+        if (response.status === 200) {
+
+            epochDate = new Date(meeting.scheduledDate * 1000);
+            // schedInfo.innerText = epochDate.toLocaleString();
+            const row = document.createElement("tr");
+
+            const basic = document.createElement("td");
+            const complaints = document.createElement("td");
+            const speakers = document.createElement("td");
+
+            basic.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
+
+            let complaintList = await GetComplaintsByMeeting(meetingID);
+
+            ClearTables();
+            let cString = "";
+            for (item of complaintList) {
+                cString += `${item.description}\n\n`;
+            }
+
+            complaints.innerText = cString;
+            speakers.innerText = "<Under Construction>";
+
+            row.appendChild(basic);
+            row.appendChild(complaints);
+            row.appendChild(speakers);
+
+            specificInfo.appendChild(row);
+
+            //  basicInfo.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
+
+            // addInfo.innerText = meeting.address;
+
+            //  sumInfo.innerText = meeting.summary;            
+        }
+        else {
+            alert("Something went wrong");
+        }
+
+        ShowSpecific();
+
+
+    }
+
+    async function GetComplaintsByMeeting(id) {
+
+        console.log("viewing meeting " + id);
+
+        let requestString = `http://localhost:8080/complaints?meetingID=${id}`;
+
+        console.log(requestString);
+        const response = await fetch(requestString);
+
+        let complaintList = await response.json();
+
+        return complaintList;
+    }
+
+    // on first load
+    meetingForm.setAttribute("style", "display: none");
+    specificMeetingTable.setAttribute("style", "display: none");
+    backToMainListBtn.setAttribute("style", "display: none");
+
+    GetAllMeetings();
+
+
+
+    // async function UpdateComplaintStatus(id, status) {
+
+    //     //localhost:8080/complaints/{complaintID}/{status}
+    //     let requestString = `http://localhost:8080/complaints/${id}/${status}`;
+
+    //     const response = await fetch(requestString);
+
+    //     const complaint = await response.json();
+
+    //     if (complaint.status === 200)
+    //     {
+    //         // we did it reddit!
+    //     }
+    //     else
+    //     {
+    //         // something went horribly wrong
+    //     }
+       
+    // }
+
+
+
+
+
+</script>
+
+</html>

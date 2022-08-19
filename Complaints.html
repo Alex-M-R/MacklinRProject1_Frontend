@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Complaints Management</title>
+    <link rel="stylesheet" href="BaseStyle.css">
+</head>
+
+<body>
+    <!-- This part is uniform across all pages -->
+    <header class="header">
+        <h1>Welcome to "City Name"</h1>
+        <h2>Home <br> of the <br> "Something"</h2>
+    </header>
+
+    <div class="navbar">
+        <a href="Project1MainPage.html">Home</a>
+        <a href="SubmitComplaint.html">Report a Complaint</a>
+        <a href=ScheduledMeetingsPage.html>Attend a meeting</a>
+
+        <div class="dropdown">
+            <button class="dropbtn">Council Work
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="Complaints.html">Complaints Management</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+            </div>
+        </div>
+        <a href="LoginPage.html">Login</a>
+    </div>
+
+    <!-- end of uniform portion -->
+
+
+    <!-- Complaints table -->
+    <table class="center" id="complaintTable">
+        <thead>
+
+            <tr>
+                <th>Description</th>
+                <th>Current Priority</th>
+                <th>Set High</th>
+                <th>Set Low</th>
+                <th>Set Ignored</th>
+                <th>Set Resolved</th>
+                <th>Meeting Date</th>
+                <th>Meeting Address</th>
+
+            </tr>
+
+
+        </thead>
+        <tbody id="complaintList">
+        </tbody>
+    </table>
+
+</body>
+
+
+<script>
+
+    const complaintTable = document.getElementById("complaintTable");
+    const complaintList = document.getElementById("complaintList");
+
+
+    // const createMeetingButton = document.getElementById("createMeetingBtn")
+    // const backToMainListBtn = document.getElementById("backToMainListBtn");
+    // const meetingForm = document.getElementById("meetingForm");
+    // const submitNewMeetingBtn = document.getElementById("submitBtn");
+    // const specificMeetingTable = document.getElementById("specificMeetingTable");
+    // const specificInfo = document.getElementById("specificInfo");
+
+
+    // const basicInfo = document.getElementById("basicInfo");
+    // const addInfo = document.getElementById("addInfo");
+    // const sumInfo = document.getElementById("sumInfo");
+
+    // submit meeting button here
+    document.addEventListener("submit", async event => {
+        event.preventDefault();
+    });
+
+    function ClearTables() {
+        complaintTable.innerText = "";
+    }
+
+    function ShowSpecific() {
+        // show specific
+        specificMeetingTable.setAttribute("style", "display: table");
+        backToMainListBtn.setAttribute("style", "display:block");
+
+        // Hide Rest
+        createMeetingButton.setAttribute("style", "display: none;");
+        meetingTable.setAttribute("style", "display: none");
+    }
+
+    function HideSpecific() {
+        // hide specific
+        specificMeetingTable.setAttribute("style", "display: none");
+        backToMainListBtn.setAttribute("style", "display: none");
+
+        // show default
+        createMeetingButton.setAttribute("style", "display: block");
+        meetingTable.setAttribute("style", "display: table");
+    }
+
+    function ShowForm() {
+        // show form
+        meetingForm.setAttribute("style", "display: block;");
+
+        // Hide Rest
+        createMeetingButton.setAttribute("style", "display: none;");
+        meetingTable.setAttribute("style", "display: none");
+    }
+
+    function HideForm() {
+        // hide form
+        meetingForm.setAttribute("style", "display: none");
+
+        // show rest
+        createMeetingButton.setAttribute("style", "display: block");
+        meetingTable.setAttribute("style", "display: table");
+    }
+
+    async function GetAllComplaints() {
+
+        let requestString = "http://localhost:8080/complaints";
+        console.log(requestString);
+
+        const response = await fetch(requestString);
+
+        const complaints = await response.json();
+
+        console.log(complaints);
+
+        if (response.status === 200) {
+            for (complaint of complaints) {
+
+                const complaintRow = document.createElement("tr");
+
+                const description = document.createElement("td");
+                description.innerText = complaint.description;
+
+                const status = document.createElement("td");
+                status.innerText = complaint.status;
+
+                //const statusChangeDropdown = document.createElement("dropdown");  // use dropdown someday instead of buttons if I can get it to work
+                const btns = document.createElement("td");
+
+                const aMeetingDate = document.createElement("td");
+                let meeting = await GetMeetingByID(complaint.meetingID);
+
+                console.log(meeting);
+                let meetingDate = epochDate = new Date(meeting.scheduledDate * 1000);
+
+                aMeetingDate.innerText = epochDate.toLocaleString();
+
+                const aMeetingAddress = document.createElement("td");
+                aMeetingAddress.innerText = meeting.address;
+
+
+                const hBTD = document.createElement("td");
+                const highBTN = document.createElement('button');
+
+                const lBTD = document.createElement("td");
+                const lowBTN = document.createElement('button');
+
+                const rBTD = document.createElement("td");
+                const resolvedBTN = document.createElement('button');
+
+                const iBTD = document.createElement("td");
+                const ignoredBTN = document.createElement('button');
+
+
+                // button.dataset.meetingID = meeting.id;  // .dataset lets you get/set properties on the button.
+                highBTN.innerText = "high";              // text on the button
+                highBTN.dataset.status = "high";
+                highBTN.dataset.id = complaint.id;
+
+                lowBTN.innerText = "low";              // text on the button
+                lowBTN.dataset.status = "low";
+                lowBTN.dataset.id = complaint.id;
+
+                resolvedBTN.innerText = "resolved";              // text on the button
+                resolvedBTN.dataset.status = "resolved";
+                resolvedBTN.dataset.id = complaint.id;
+
+                ignoredBTN.innerText = "ignored";              // text on the button
+                ignoredBTN.dataset.status = "ignored";
+                ignoredBTN.dataset.id = complaint.id;
+
+
+                hBTD.appendChild(highBTN);
+                lBTD.appendChild(lowBTN);
+                rBTD.appendChild(resolvedBTN);
+                iBTD.appendChild(ignoredBTN);
+
+                highBTN.addEventListener('click', async buttonClicked => {
+           
+                    await PatchComplaint(highBTN.dataset.id, highBTN.dataset.status);
+                });
+
+                lowBTN.addEventListener('click', async buttonClicked => {
+
+                    await PatchComplaint(lowBTN.dataset.id, lowBTN.dataset.status);
+                });
+
+                resolvedBTN.addEventListener('click', async buttonClicked => {
+
+                   await  PatchComplaint(resolvedBTN.dataset.id, resolvedBTN.dataset.status);
+                });
+
+                ignoredBTN.addEventListener('click', async buttonClicked => {
+
+                  await   PatchComplaint(resolvedBTN.dataset.id, ignoredBTN.dataset.status);
+                });
+
+
+                // button.dataset.meetingID = meeting.id;  // .dataset lets you get/set properties on the button.
+                // button.innerText = "View";
+                // button.addEventListener('click', async buttonClicked => {
+
+                //     await ViewMeeting(buttonClicked.target.dataset.meetingID);
+
+                // });
+
+                complaintRow.appendChild(description);
+                complaintRow.appendChild(status);
+
+                complaintRow.appendChild(hBTD);
+                complaintRow.appendChild(lBTD);
+                complaintRow.appendChild(rBTD);
+                complaintRow.appendChild(iBTD);
+
+                complaintRow.appendChild(aMeetingDate);
+                complaintRow.appendChild(aMeetingAddress);
+
+                complaintList.appendChild(complaintRow);
+            }
+        }
+        else {
+            alert("Something went wrong");
+        }
+    }
+
+    async function PatchComplaint(id, newStatus) {
+        let requestString = `http://localhost:8080/complaints/${id}/${newStatus}`;
+        console.log(requestString);
+        const response = await fetch(requestString,
+        {
+            method: "PATCH"
+        });
+
+        if (response.status === 200)
+        {
+            alert("status updated");
+            location.reload();
+        }
+    }
+
+
+    // async function ViewMeeting(meetingID) {
+    //     console.log("viewing meeting " + meetingID);
+
+
+    //     let requestString = `http://localhost:8080/meetings/`;
+
+    //     requestString += meetingID;
+
+    //     console.log(requestString);
+    //     const response = await fetch(requestString);
+
+    //     const meeting = await response.json();
+
+    //     console.log(meeting);
+
+    //     if (response.status === 200) {
+
+    //         epochDate = new Date(meeting.scheduledDate * 1000);
+    //         // schedInfo.innerText = epochDate.toLocaleString();
+    //         const row = document.createElement("tr");
+
+    //         const basic = document.createElement("td");
+    //         const complaints = document.createElement("td");
+    //         const speakers = document.createElement("td");
+
+    //         basic.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
+
+    //         let complaintList = await GetComplaintsByMeeting(meetingID);
+
+    //         ClearTables();
+    //         let cString = "";
+    //         for (item of complaintList) {
+    //             cString += `${item.description}\n\n`;
+    //         }
+
+    //         complaints.innerText = cString;
+    //         speakers.innerText = "<Under Construction>";
+
+    //         row.appendChild(basic);
+    //         row.appendChild(complaints);
+    //         row.appendChild(speakers);
+
+    //         specificInfo.appendChild(row);
+
+    //         //  basicInfo.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
+
+    //         // addInfo.innerText = meeting.address;
+
+    //         //  sumInfo.innerText = meeting.summary;            
+    //     }
+    //     else {
+    //         alert("Something went wrong");
+    //     }
+
+    //     ShowSpecific();
+
+
+    // }
+
+    async function GetMeetingByID(id) {
+
+        let requestString = `http://localhost:8080/meetings/${id}`;
+
+        console.log(requestString);
+        const response = await fetch(requestString);
+
+        let meeting = await response.json();
+
+        return meeting;
+    }
+
+    // on first load
+    // meetingForm.setAttribute("style", "display: none");
+    //  specificMeetingTable.setAttribute("style", "display: none");
+    // backToMainListBtn.setAttribute("style", "display: none");
+
+    GetAllComplaints();
+
+</script>
+
+</html>

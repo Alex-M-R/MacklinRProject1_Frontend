@@ -1,10 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
 
-    <title>Placeholder</title>
+<head>
+    <title>Main City Site</title>
+    <link rel="stylesheet" href="BaseStyle.css">
 </head>
+
+
 <body>
-    
+
+    <!-- This part is uniform across all pages -->
+    <header class="header">
+    <h1>Welcome to "City Name"</h1>
+    <h2>Home <br> of the <br> "Something"</h2>
+</header>
+
+    <div class="navbar">
+        <a href="Project1MainPage.html">Home</a>
+        <a href="SubmitComplaint.html">Report a Complaint</a>
+        <a href=ScheduledMeetingsPage.html>Attend a meeting</a>
+       
+        <div class="dropdown">
+          <button class="dropbtn">Council Work
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="Complaints.html">Complaints Management</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </div>
+        <a href="LoginPage.html">Login</a>
+      </div>
+
+    <!-- end of uniform portion -->
+
 </body>
+
+<!--            <li><a href="Project1MainPage.html">Home</a></li>
+                <li><a href="SubmitComplaint.html">Submit complaints</a></li>
+                <li><a href="ScheduledMeetingsPage.html">Attend a meeting</a></li>
+                <li><a href="CouncilPage">Council Dashboard</a></li> -->
+
+<Script>
+    //will ultimately look into how to do logins securely, but for now while i work on site navigation... user will be a councilman.
+    
+    localStorage.setItem("access", "COUNCIL");
+
+    // when loading a webpage. Check local storage to see if we have a valid user.
+        // check if a local user is stored.
+        // use that user info to do a "request login" on the server.
+        // if login credentials are valid...
+
+    function LoadCouncilContent()
+    {
+
+    }
+
+</Script>
+
+
 </html>

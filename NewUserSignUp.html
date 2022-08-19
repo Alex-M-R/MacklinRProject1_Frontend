@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Sign-up</title>
+    <link rel="stylesheet" href="BaseStyle.css">
+</head>
+<body>
+
+    <form >
+        <fieldset>
+            <legend>Create new Account</legend>
+
+            <label for="inputUserName">username</label>
+            <input type="text" id="inputUserName" placeholder="newUser">
+<br><br>
+            <label for="inputPassword">password</label>
+            <input type="password" id="inputPassword" placeholder="">
+        </fieldset>
+        <button id="submitBtn">Submit</button>
+    </form>
+</body>
+
+<Script>
+
+    document.addEventListener("submit", async event =>
+    {
+        event.preventDefault();
+    });
+</Script>
+</html>
