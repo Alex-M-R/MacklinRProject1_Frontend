@@ -1,7 +1,7 @@
 const meetingTable = document.getElementById("meetingTable");
 const description = document.getElementById("meetingList");
 
-const createMeetingButton = document.getElementById("createMeetingBtn")
+const createMeetingBtn = document.getElementById("createMeetingBtn")
 const backToMainListBtn = document.getElementById("backToMainListBtn");
 const meetingForm = document.getElementById("meetingForm");
 const submitNewMeetingBtn = document.getElementById("submitBtn");
@@ -19,61 +19,61 @@ document.addEventListener("submit", async event => {
 });
 
 
-async function CreateMeetingButton() {
+async function createMeetingButton() {
     // create meeting
-    await CreateMeeting();
+    await createMeeting();
 
-    HideForm();
+    hideForm();
 
     // refresh meeting display
-    ClearTables();
-    GetAllMeetings();
+    clearTables();
+    getAllMeetings();
 }
 
-function ClearTables() {
+function clearTables() {
     description.innerText = "";
     specificInfo.innerText = "";
 }
 
-function ShowSpecific() {
+function showSpecific() {
     // show specific
     specificMeetingTable.setAttribute("style", "display: table");
     backToMainListBtn.setAttribute("style", "display:block");
 
     // Hide Rest
-    createMeetingButton.setAttribute("style", "display: none;");
+    createMeetingBtn.setAttribute("style", "display: none;");
     meetingTable.setAttribute("style", "display: none");
 }
 
-function HideSpecific() {
+function hideSpecific() {
     // hide specific
     specificMeetingTable.setAttribute("style", "display: none");
     backToMainListBtn.setAttribute("style", "display: none");
 
     // show default
-    createMeetingButton.setAttribute("style", "display: block");
+    createMeetingBtn.setAttribute("style", "display: block");
     meetingTable.setAttribute("style", "display: table");
 }
 
-function ShowForm() {
+function showForm() {
     // show form
     meetingForm.setAttribute("style", "display: block;");
 
     // Hide Rest
-    createMeetingButton.setAttribute("style", "display: none;");
+    createMeetingBtn.setAttribute("style", "display: none;");
     meetingTable.setAttribute("style", "display: none");
 }
 
-function HideForm() {
+function hideForm() {
     // hide form
     meetingForm.setAttribute("style", "display: none");
 
     // show rest
-    createMeetingButton.setAttribute("style", "display: block");
+    createMeetingBtn.setAttribute("style", "display: block");
     meetingTable.setAttribute("style", "display: table");
 }
 
-async function CreateMeeting() {
+async function createMeeting() {
     const dateInput = document.getElementById("dateInput");
     const addressInput = document.getElementById("addressInput");
     const summaryInput = document.getElementById("summaryInput");
@@ -103,7 +103,7 @@ async function CreateMeeting() {
     }
 }
 
-async function GetAllMeetings() {
+async function getAllMeetings() {
 
     let requestString = "http://localhost:8080/meetings";
 
@@ -138,7 +138,7 @@ async function GetAllMeetings() {
             button.innerText = "View";              // text on the button
             button.addEventListener('click', async buttonClicked => {
 
-                await ViewMeeting(buttonClicked.target.dataset.meetingID);
+                await viewMeeting(buttonClicked.target.dataset.meetingID);
 
             });
 
@@ -155,7 +155,7 @@ async function GetAllMeetings() {
     }
 }
 
-async function ViewMeeting(meetingID) {
+async function viewMeeting(meetingID) {
     console.log("viewing meeting " + meetingID);
 
 
@@ -182,9 +182,9 @@ async function ViewMeeting(meetingID) {
 
         basic.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
 
-        let complaintList = await GetComplaintsByMeeting(meetingID);
+        let complaintList = await getComplaintsByMeeting(meetingID);
 
-        ClearTables();
+        clearTables();
         let cString = "";
         for (item of complaintList) {
             cString += `${item.description}\n\n`;
@@ -209,12 +209,12 @@ async function ViewMeeting(meetingID) {
         alert("Something went wrong");
     }
 
-    ShowSpecific();
+    showSpecific();
 
 
 }
 
-async function GetComplaintsByMeeting(id) {
+async function getComplaintsByMeeting(id) {
 
     console.log("viewing meeting " + id);
 
@@ -233,4 +233,4 @@ meetingForm.setAttribute("style", "display: none");
 specificMeetingTable.setAttribute("style", "display: none");
 backToMainListBtn.setAttribute("style", "display: none");
 
-GetAllMeetings();
+getAllMeetings();

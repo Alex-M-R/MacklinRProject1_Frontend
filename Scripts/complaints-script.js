@@ -21,11 +21,11 @@ const complaintTable = document.getElementById("complaintTable");
         event.preventDefault();
     });
 
-    function ClearTables() {
+    function clearTables() {
         complaintTable.innerText = "";
     }
 
-    function ShowSpecific() {
+    function showSpecific() {
         // show specific
         specificMeetingTable.setAttribute("style", "display: table");
         backToMainListBtn.setAttribute("style", "display:block");
@@ -35,7 +35,7 @@ const complaintTable = document.getElementById("complaintTable");
         meetingTable.setAttribute("style", "display: none");
     }
 
-    function HideSpecific() {
+    function hideSpecific() {
         // hide specific
         specificMeetingTable.setAttribute("style", "display: none");
         backToMainListBtn.setAttribute("style", "display: none");
@@ -45,7 +45,7 @@ const complaintTable = document.getElementById("complaintTable");
         meetingTable.setAttribute("style", "display: table");
     }
 
-    function ShowForm() {
+    function showForm() {
         // show form
         meetingForm.setAttribute("style", "display: block;");
 
@@ -54,7 +54,7 @@ const complaintTable = document.getElementById("complaintTable");
         meetingTable.setAttribute("style", "display: none");
     }
 
-    function HideForm() {
+    function hideForm() {
         // hide form
         meetingForm.setAttribute("style", "display: none");
 
@@ -63,7 +63,7 @@ const complaintTable = document.getElementById("complaintTable");
         meetingTable.setAttribute("style", "display: table");
     }
 
-    async function GetAllComplaints() {
+    async function getAllComplaints() {
         let requestString = "http://localhost:8080/complaints";
         console.log(requestString);
 
@@ -76,7 +76,7 @@ const complaintTable = document.getElementById("complaintTable");
 
         if (response.status === 200) {
 
-            const meetings = await GetAllMeetings();
+            const meetings = await getAllMeetings();
 
             // meetingOptions.innerText = "";
             if (response.status === 200) {
@@ -112,7 +112,7 @@ const complaintTable = document.getElementById("complaintTable");
                 const btns = document.createElement("td");
 
                 const aMeetingDate = document.createElement("td");
-                let meeting = await GetMeetingByID(complaint.meetingID);
+                let meeting = await getMeetingByID(complaint.meetingID);
 
                 console.log(meeting);
                 let meetingDate = epochDate = new Date(meeting.scheduledDate * 1000);
@@ -133,7 +133,7 @@ const complaintTable = document.getElementById("complaintTable");
                 setStatusInput.dataset.id = complaint.id;
 
                 setStatusInput.addEventListener('change', async event => {
-                    await PatchComplaint(setStatusInput.dataset.id, event.target.value);
+                    await patchComplaint(setStatusInput.dataset.id, event.target.value);
                 });
 
                 const changeMeetingTD = document.createElement("td");
@@ -144,7 +144,7 @@ const complaintTable = document.getElementById("complaintTable");
                 setMeetingInput.dataset.id = complaint.id;
                 setMeetingInput.addEventListener('change', async event => {
                     // set meeting
-                    await SetMeetingAssignment(setMeetingInput.dataset.id, event.target.value);
+                    await setMeetingAssignment(setMeetingInput.dataset.id, event.target.value);
 
                 });
 
@@ -169,7 +169,7 @@ const complaintTable = document.getElementById("complaintTable");
         }
     }
 
-    async function PatchComplaint(id, newStatus) {
+    async function patchComplaint(id, newStatus) {
         let requestString = `http://localhost:8080/complaints/${id}/${newStatus}`;
         console.log(requestString);
         const response = await fetch(requestString,
@@ -183,17 +183,27 @@ const complaintTable = document.getElementById("complaintTable");
         }
     }
 
-    async function SetMeetingAssignment(id, meetingSummary) {
+    async function setMeetingAssignment(id, meetingSummary) {
 
         let meetingID = meetingMap.get(meetingSummary);
         
         // correct route now! just need to implement backend and then finish front end.
         let requestString = `http://localhost:8080/complaints/${id}/${meetingID}`;
-        console.log(requestString);
+        
+        const response = await fetch(requestString,
+            {
+                method: "PUT"
+            });
+
+            if (response.status === 200)
+            {
+                alert("attached to meeting successfully");
+                location.reload();
+            }
     }
 
     
-    async function GetMeetingByID(id) {
+    async function getMeetingByID(id) {
 
         let requestString = `http://localhost:8080/meetings/${id}`;
 
@@ -205,7 +215,7 @@ const complaintTable = document.getElementById("complaintTable");
         return meeting;
     }
 
-    async function GetAllMeetings() {
+    async function getAllMeetings() {
 
         let requestString = "http://localhost:8080/meetings";
 
@@ -227,4 +237,4 @@ const complaintTable = document.getElementById("complaintTable");
     //  specificMeetingTable.setAttribute("style", "display: none");
     // backToMainListBtn.setAttribute("style", "display: none");
 
-    GetAllComplaints();
+    getAllComplaints();
