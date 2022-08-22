@@ -18,28 +18,44 @@
             font-size: 24px;
         }
 
+        form
+        {
+            width: 1000px;
+        }
+        textarea
+        {
+            width: 1000px;
+        }
+
     </style>
 </head>
 <body>
 
-            <!-- This part is uniform across all pages -->
+    <!-- This part is uniform across all pages -->
     <header class="header">
-
         <h1>Welcome to "City Name"</h1>
         <h2>Home <br> of the <br> "Something"</h2>
-
-        <nav class="topNav">
-            <ul id="topNav">
-                <li><a href="Project1MainPage.html">Home</a></li>
-                <li><a href="SubmitComplaint.html">Submit complaints</a></li>
-                <li><a href="ScheduledMeetingsPage.html">Attend a meeting</a></li>
-                <!-- <li><a href="Ideas.html">Administration</a></li> -->
-                <!-- <li><a href="Email.html">Register Today</a></li> -->
-            </ul>
-        </nav>
     </header>
-
-    <!-- end of uniform portion -->
+    
+        <div class="navbar">
+            <a href="Project1MainPage.html">Home</a>
+            <a href="SubmitComplaint.html">Report a Complaint</a>
+            <a href=ScheduledMeetingsPage.html>Attend a meeting</a>
+           
+            <div class="dropdown">
+              <button class="dropbtn">Council Work
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content">
+                <a href="Complaints.html">Complaints Management</a>
+                <a href="#">Approve Registering Users</a>
+                <a href="#">Approve Meeting Speakers</a>
+              </div>
+            </div>
+            <a href="LoginPage.html">Login</a>
+          </div>
+    
+        <!-- end of uniform portion -->
     
 <p>We're sorry you're having trouble. Tell us about your issue below. The council definitely cares about you and your issue...</p>
 
@@ -52,43 +68,6 @@
         </fieldset>
         <button id="submitBtn">Submit</button>
     </form>
+    <script type="text/javascript" src="/Scripts/SubmitComplaintScript.js"></script>
 </body>
-
-<Script>
-
-    const descriptionBox = document.getElementById("description");
-
-    document.addEventListener("submit", async event =>
-    {
-        event.preventDefault();
-
-        const description = descriptionBox.value;
-
-        // id will be clobbered with db key. meetingID defaulting to -1. Council member will assign complaint a valid meetingID if not ignoring request
-      //  const complaint = {id:0, description, status:'PENDING', meetingID: -1};
-        const complaint = {description}
-
-        const response = await fetch("http://localhost:8080/complaints",
-        {
-            method:"POST",
-            body: JSON.stringify(complaint),
-            headers:
-            {
-                "Content-Type":"application/json"
-            }
-        });
-
-        if (response.status === 201)
-        {
-            // ok
-            alert("Complaint submitted");
-            // later send user to a "Thank you" page that links back to the main site, rather than keep them on the complaint submission form.
-        }
-        else
-        {
-            alert("Something went wrong");
-        }
-
-    });
-</Script>
 </html>
