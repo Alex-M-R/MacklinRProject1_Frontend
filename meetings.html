@@ -80,24 +80,26 @@
             <a href=meetings.html>Attend a meeting</a>
            
             <div class="dropdown">
-              <button class="dropbtn">Council Work
+              <button id="CouncilPortal" class="dropbtn">Council Work
                 <i class="fa fa-caret-down"></i>
               </button>
               <div class="dropdown-content">
                 <a href="complaints.html">Complaints Management</a>
-                <a href="#">Approve Registering Users</a>
+                <a href="approve-user.html">Approve Registering Users</a>
                 <a href="#">Approve Meeting Speakers</a>
               </div>
             </div>
-            <a href="login-page.html">Login</a>
+            <a id="LoginLink" href="login-page.html">Login</a>
+            <a id="LogoutLink" onclick="loggedOut()" href="main-page.html">Logout</a>
           </div>
     
+          <script type="text/javascript" src="/Scripts/user-control-script.js"></script>
         <!-- end of uniform portion -->
 
 
         <br>
-    <button id="createMeetingBtn" onclick="ShowForm()">Create new Meeting</button>
-    <button id="backToMainListBtn" onclick=" GetAllMeetings(); HideSpecific();">Back to Meeting List</button>
+    <button id="createMeetingBtn" onclick="showForm()">Create new Meeting</button>
+    <button id="backToMainListBtn" onclick=" getAllMeetings(); hideSpecific();">Back to Meeting List</button>
     <form id="meetingForm">
         <fieldset>
             <legend>Create new Meeting</legend>
@@ -114,8 +116,8 @@
             <textarea name="summary_Text" id="summaryInput"></textarea>
 
             <br>
-            <button id="submitBtn" onclick="CreateMeetingButton()">Create Meeting</button>
-            <button id="cancelBtn" onclick="HideForm()">Cancel</button>
+            <button id="submitBtn" onclick="createMeetingButton()">Create Meeting</button>
+            <button id="cancelBtn" onclick="hideForm()">Cancel</button>
         </fieldset>
     </form>
 

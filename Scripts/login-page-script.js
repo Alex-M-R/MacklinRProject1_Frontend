@@ -31,7 +31,7 @@ const usernameInput = document.getElementById("inputUserName");
 
             // local storage is tied by domain name
 
-            window.location = "Project1MainPage.html";
+            window.location = "main-page.html";
 
         }
 

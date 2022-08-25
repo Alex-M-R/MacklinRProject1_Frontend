@@ -43,18 +43,20 @@
             <a href=meetings.html>Attend a meeting</a>
            
             <div class="dropdown">
-              <button class="dropbtn">Council Work
+              <button id="CouncilPortal" class="dropbtn">Council Work
                 <i class="fa fa-caret-down"></i>
               </button>
               <div class="dropdown-content">
                 <a href="complaints.html">Complaints Management</a>
-                <a href="#">Approve Registering Users</a>
+                <a href="approve-user.html">Approve Registering Users</a>
                 <a href="#">Approve Meeting Speakers</a>
               </div>
             </div>
-            <a href="login-page.html">Login</a>
+            <a id="LoginLink" href="login-page.html">Login</a>
+            <a id="LogoutLink" onclick="loggedOut()" href="main-page.html">Logout</a>
           </div>
     
+          <script type="text/javascript" src="/Scripts/user-control-script.js"></script>
         <!-- end of uniform portion -->
     
 <p>We're sorry you're having trouble. Tell us about your issue below. The council definitely cares about you and your issue...</p>

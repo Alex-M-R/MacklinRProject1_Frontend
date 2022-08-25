@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Main City Site</title>
+  <link rel="stylesheet" href="BaseStyle.css">
+</head>
+
+
+<body>
+
+  <!-- This part is uniform across all pages -->
+  <header class="header">
+    <h1>Welcome to "City Name"</h1>
+    <h2>Home <br> of the <br> "Something"</h2>
+  </header>
+
+  <div class="navbar">
+    <a href="main-page.html">Home</a>
+    <a href="submit-complaints.html">Report a Complaint</a>
+    <a href=meetings.html>Attend a meeting</a>
+
+    <div class="dropdown">
+      <button id="CouncilPortal" class="dropbtn">Council Work
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="complaints.html">Complaints Management</a>
+        <a href="approve-user.html">Approve Registering Users</a>
+        <a href="#">Approve Meeting Speakers</a>
+      </div>
+    </div>
+    <a id="LoginLink" href="login-page.html">Login</a>
+    <a id="LogoutLink" onclick="loggedOut()" href="main-page.html">Logout</a>
+  </div>
+
+  <script type="text/javascript" src="/Scripts/user-control-script.js"></script>
+  <!-- end of uniform portion -->
+
+  <table class="center">
+    <thead>
+
+      <tr>
+        <th>UserName</th>
+        <th>Approve</th>
+        <!-- <th>Meeting Address</th> -->
+        <!-- look to replace the buttons with a datalist tag -->
+      </tr>
+
+
+    </thead>
+    <tbody id="inactiveUserList">
+    </tbody>
+  </table>
+
+  <datalist id="UserListOptions">
+    <option value="inactive">
+    <option value="constituent">
+    <option value="council">
+  </datalist>
+
+  <script type="text/javascript" src="/Scripts/approve-user-script.js"></script>
+</body>
+
+</html>

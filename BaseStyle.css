@@ -32,8 +32,10 @@
         }
 
         #topNav a:hover {
-            background-color: lightgray; /* Changes color of the navbar button when hovering*/
-            color: black;   /* Changes color of text in the navbar when hovering*/
+            background-color: lightgray;
+            /* Changes color of the navbar button when hovering*/
+            color: black;
+            /* Changes color of text in the navbar when hovering*/
         }
 
         #body {
@@ -48,10 +50,10 @@
             text-align: center;
         }
 
-         /* Navbar container */
-         .navbar {
-            width:max-content;
-            margin:auto;
+        /* Navbar container */
+        .navbar {
+            width: max-content;
+            margin: auto;
             overflow: hidden;
             background-color: rgba(51, 51, 51, 0);
             font-family: Arial;
@@ -65,7 +67,7 @@
             text-align: center;
             padding: 14px 16px;
             text-decoration: none;
-            
+
         }
 
         /* The dropdown container */
@@ -124,40 +126,36 @@
             display: block;
         }
 
-        
-        legend 
-        {
+
+        legend {
             text-align: center;
         }
-        
-        p
-        {
+
+        p {
             text-align: center;
             font-size: 24px;
         }
-        form
-        {
-            width:max-content;
+
+        form {
+            width: max-content;
             height: max-content;
-            margin:auto; 
+            margin: auto;
         }
-        button
-        {
+
+        button {
             display: flex;
             text-align: center;
             margin: auto;
         }
 
-        .center
-
-        {
+        .center {
             margin-left: auto;
             margin-right: auto;
         }
 
-        input {
+        /* input {
             float: right;
-        }
+        } */
 
         textarea {
             resize: none;
