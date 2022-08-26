@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <title>Sign-up</title>
     <link rel="stylesheet" href="BaseStyle.css">
+    <style>
+        input
+        {
+            float: right;
+        }
+    </style>
 </head>
+
 <body>
 
     <form>
         <fieldset>
             <legend>Create new Account</legend>
+            <label for="inputFName">First Name</label>
+            <input type="text" id="inputFName">
 
-            <label for="inputUserName">username</label>
-            <input type="text" id="inputUserName" placeholder="newUser">
-<br><br>
-            <label for="inputPassword">password</label>
+            <br><br>
+
+            <label for="inputLName">Last Name</label>
+            <input type="text" id="inputLName">
+
+            <br><br>
+
+            <label for="inputUserName">User Name</label>
+            <input type="text" id="inputUserName">
+
+            <br><br>
+
+            <label for="inputPassword">Password</label>
             <input type="password" id="inputPassword" placeholder="">
         </fieldset>
         <button id="submitBtn">Submit</button>
@@ -23,4 +42,5 @@
     <button id="cancel" onclick="location.href='main-page.html'">Cancel</button>
     <script type="text/javascript" src="/Scripts/new-user-signup-script.js"></script>
 </body>
+
 </html>

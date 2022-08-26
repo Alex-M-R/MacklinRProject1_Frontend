@@ -24,6 +24,7 @@ const descriptionBox = document.getElementById("description");
         {
             // ok
             alert("Complaint submitted");
+            window.location = "main-page.html";
             // later send user to a "Thank you" page that links back to the main site, rather than keep them on the complaint submission form.
         }
         else

@@ -3,6 +3,8 @@ const description = document.getElementById("meetingList");
 
 const createMeetingBtn = document.getElementById("createMeetingBtn")
 const backToMainListBtn = document.getElementById("backToMainListBtn");
+const requestSpeakBtn = document.getElementById("requestSpeakBtn");
+
 const meetingForm = document.getElementById("meetingForm");
 const submitNewMeetingBtn = document.getElementById("submitBtn");
 const specificMeetingTable = document.getElementById("specificMeetingTable");
@@ -13,10 +15,27 @@ const basicInfo = document.getElementById("basicInfo");
 const addInfo = document.getElementById("addInfo");
 const sumInfo = document.getElementById("sumInfo");
 
+
 // submit meeting button here
 document.addEventListener("submit", async event => {
     event.preventDefault();
 });
+
+requestSpeakBtn.addEventListener("click", async event => {
+    requestToSpeak(requestSpeakBtn.dataset.meetingID);
+});
+
+
+let storedUser = localStorage.getItem("user");
+
+createMeetingBtn.setAttribute("style", "display: none");
+requestSpeakBtn.setAttribute("style", "display: none");
+if (storedUser !== null) {
+    storedUser = JSON.parse(storedUser);
+    if (storedUser.role === "COUNCIL") {
+        createMeetingBtn.setAttribute("style", "display: block");
+    }
+}
 
 
 async function createMeetingButton() {
@@ -40,6 +59,10 @@ function showSpecific() {
     specificMeetingTable.setAttribute("style", "display: table");
     backToMainListBtn.setAttribute("style", "display:block");
 
+    if (storedUser !== null && storedUser.role !== "INACTIVE") {
+        requestSpeakBtn.setAttribute("style", "display: block");
+    }
+
     // Hide Rest
     createMeetingBtn.setAttribute("style", "display: none;");
     meetingTable.setAttribute("style", "display: none");
@@ -49,6 +72,7 @@ function hideSpecific() {
     // hide specific
     specificMeetingTable.setAttribute("style", "display: none");
     backToMainListBtn.setAttribute("style", "display: none");
+    requestSpeakBtn.setAttribute("style", "display: none");
 
     // show default
     createMeetingBtn.setAttribute("style", "display: block");
@@ -139,7 +163,6 @@ async function getAllMeetings() {
             button.addEventListener('click', async buttonClicked => {
 
                 await viewMeeting(buttonClicked.target.dataset.meetingID);
-
             });
 
             meetingRow.appendChild(address);
@@ -170,6 +193,7 @@ async function viewMeeting(meetingID) {
 
     console.log(meeting);
 
+
     if (response.status === 200) {
 
         epochDate = new Date(meeting.scheduledDate * 1000);
@@ -182,6 +206,7 @@ async function viewMeeting(meetingID) {
 
         basic.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
 
+        // attached complaints
         let complaintList = await getComplaintsByMeeting(meetingID);
 
         clearTables();
@@ -191,7 +216,30 @@ async function viewMeeting(meetingID) {
         }
 
         complaints.innerText = cString;
-        speakers.innerText = "<Under Construction>";
+
+
+        // approved speakers
+        let speakerList = await getSpeakersByMeeting(meetingID);
+
+        let alreadyRequested = false;
+
+        let sString = "";
+        console.log(speakerList);
+        for (item of speakerList) 
+        {
+            
+            if (item.state === "APPROVED") {
+                sString += `${item.fName} ${item.lName}\n`;   // get combo of first and last name
+            }
+            if (storedUser === null)
+                continue;
+            if (item.appUserID === storedUser.id) {
+                // hide request to speak button. Current user already speaking
+                alreadyRequested = true;
+            }
+        }
+
+        speakers.innerText = sString;
 
         row.appendChild(basic);
         row.appendChild(complaints);
@@ -199,19 +247,17 @@ async function viewMeeting(meetingID) {
 
         specificInfo.appendChild(row);
 
-        //  basicInfo.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
+        showSpecific();
 
-        // addInfo.innerText = meeting.address;
-
-        //  sumInfo.innerText = meeting.summary;            
+        requestSpeakBtn.dataset.meetingID = meetingID;
+        // hide request button if already speaking     
+        if (alreadyRequested) {
+            requestSpeakBtn.setAttribute("style", "display: none");
+        }
     }
     else {
         alert("Something went wrong");
     }
-
-    showSpecific();
-
-
 }
 
 async function getComplaintsByMeeting(id) {
@@ -226,6 +272,40 @@ async function getComplaintsByMeeting(id) {
     let complaintList = await response.json();
 
     return complaintList;
+}
+
+async function getSpeakersByMeeting(meetingID) {
+    // send a meeting ID and get a list of users back
+    console.log("get Speakers by Meeting ID: " + meetingID);
+
+    let requestString = `http://localhost:8080/speakers/${meetingID}`;
+
+    const response = await fetch(requestString);
+
+    let speakerList = await response.json();
+
+    return speakerList;
+}
+
+async function requestToSpeak(meetingID) {
+    console.log("Request speak button pressed");
+    // assuming button only shows when a valid user, and not already speaking.. so just being lazy and sending request without checking. lel
+    let request = `http://localhost:8080/speakers/${meetingID}/${storedUser.id}`;
+
+    console.log(request);
+    const response = await fetch(request,
+        {
+            method: "POST",
+            headers:
+            {
+                "Content-Type": "application/json"
+            }
+        });
+
+    if (response.status === 201) {
+        alert("Request received. The council will review your request in the next 48 hours.");
+        location.reload();
+    }
 }
 
 // on first load

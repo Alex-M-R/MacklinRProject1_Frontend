@@ -1,9 +1,23 @@
+const fNameInput = document.getElementById("inputFName");
+const lNameInput = document.getElementById("inputLName");
 const userNameInput = document.getElementById("inputUserName");
 const passwordInput = document.getElementById("inputPassword");
 
 document.addEventListener("submit", async event =>
 {
     event.preventDefault();
+
+    if (fNameInput.value === "")
+    {
+        alert("First name cannot be blank");
+        return;
+    }
+
+    if (lNameInput.value === "")
+    {
+        alert("Last name cannot be blank");
+        return;
+    }
 
     if (userNameInput.value === "")
     {
@@ -18,17 +32,13 @@ document.addEventListener("submit", async event =>
     }
 
     // Not finished since new users need to be approved. So figure that out before finishing this I guess
+    let fName = fNameInput.value;
+    let lName = lNameInput.value;
     let username = userNameInput.value;
     let password = passwordInput.value;
-    let credentials = {username, password, role: 'INACTIVE'};
+    let credentials = {fName, lName, username, password, role: 'INACTIVE'};
 
-   // return; // early return to skip the below request mockup
-
-    // current thought(s):
-    // - change app-user role to include 'INACTIVE' to represent an account that has been created, but not approved by a council member.
-    // - council members can "approve" an account, by setting role to 'CONSTITUENT', or 'COUNCIL'.
-    // - council members can deny approval by deleting the account (if this is bad... then either leave forever inactive, or add state 'DENIED')
-
+    console.log(credentials);
 
     const httpResponse = await fetch("http://localhost:8080/users",
     {
@@ -43,10 +53,12 @@ document.addEventListener("submit", async event =>
     if (httpResponse.status === 201)
     {
         alert("Account registered. A council member will review your account request within 5-7 business days.");
+        window.location = "main-page.html";
     }
     else
     {
-        alert("An error has occured. Please try again later.");
+        let error = httpResponse.body;
+        alert("An error has occured. Please try again later: " + error);
     }
 
 });

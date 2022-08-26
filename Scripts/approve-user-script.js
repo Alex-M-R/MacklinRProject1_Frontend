@@ -22,9 +22,15 @@ async function getInactiveUsers() {
             const userNameDisplay = document.createElement("td");
             userNameDisplay.innerText = user.username;
 
+            const fullName = document.createElement("td");
+            fullName.innerText = `${user.fName} ${user.lName}`;
+
             const setRoleInput = document.createElement("input");
             setRoleInput.setAttribute('list', 'UserListOptions');
             setRoleInput.dataset.id = user.id;
+
+            // shows default value inactive when not currently clicking dropdown
+            setRoleInput.placeholder = "inactive";
 
             setRoleInput.addEventListener('change', async event => {
                 await setUserRole(setRoleInput.dataset.id, event.target.value);
@@ -34,6 +40,7 @@ async function getInactiveUsers() {
             inputTD.appendChild(setRoleInput);
 
             userRow.appendChild(userNameDisplay);
+            userRow.appendChild(fullName);
             userRow.appendChild(inputTD);
 
             userBody.appendChild(userRow);

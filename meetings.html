@@ -55,21 +55,21 @@
             grid-area: Approved-Speakers;
         }
 
-        table {
+         table {
             width: 100%;
             position: absolute;
-            top: 62%;
+            top: 70%;
             bottom: 0;
             left: 0;
             right: 0;
-            /* border: 1px solid; */
-        }
+
+        } 
     </style>
 </head>
 
 <body>
-    <!-- This part is uniform across all pages -->
-    <header class="header">
+     <!-- This part is uniform across all pages -->
+     <header class="header">
         <h1>Welcome to "City Name"</h1>
         <h2>Home <br> of the <br> "Something"</h2>
     </header>
@@ -86,11 +86,11 @@
               <div class="dropdown-content">
                 <a href="complaints.html">Complaints Management</a>
                 <a href="approve-user.html">Approve Registering Users</a>
-                <a href="#">Approve Meeting Speakers</a>
+                <a href="approve-speaker.html">Approve Meeting Speakers</a>
               </div>
             </div>
             <a id="LoginLink" href="login-page.html">Login</a>
-            <a id="LogoutLink" onclick="loggedOut()" href="main-page.html">Logout</a>
+            <a id="LogoutLink" onclick="loggedOut(), clearCache()" href="main-page.html">Logout</a>
           </div>
     
           <script type="text/javascript" src="/Scripts/user-control-script.js"></script>
@@ -99,7 +99,10 @@
 
         <br>
     <button id="createMeetingBtn" onclick="showForm()">Create new Meeting</button>
-    <button id="backToMainListBtn" onclick=" getAllMeetings(); hideSpecific();">Back to Meeting List</button>
+    <button id="backToMainListBtn" onclick="location.reload()">Back to Meeting List</button>
+    <br>
+    <button id ="requestSpeakBtn">Request to Speak at this Meeting</button>
+    <br>
     <form id="meetingForm">
         <fieldset>
             <legend>Create new Meeting</legend>
@@ -141,7 +144,7 @@
 
 
     <!-- table of a specific meeting when clicking "view" button -->
-    <table class="center" id="specificMeetingTable">
+    <table id="specificMeetingTable" >
         <thead>
 
             <tr>

@@ -2,11 +2,13 @@
 <html lang="en">
 
 <head>
-    <title>Complaints Management</title>
-    <link rel="stylesheet" href="BaseStyle.css">
+  <title>Main City Site</title>
+  <link rel="stylesheet" href="BaseStyle.css">
 </head>
 
+
 <body>
+
     <!-- This part is uniform across all pages -->
     <header class="header">
       <h1>Welcome to "City Name"</h1>
@@ -35,38 +37,31 @@
         <script type="text/javascript" src="/Scripts/user-control-script.js"></script>
       <!-- end of uniform portion -->
 
+  <table class="center">
+    <thead>
 
-    <!-- Complaints table -->
-    <table class="center" id="complaintTable">
-        <thead>
-
-            <tr>
-                <th>Description</th>
-                <th>Current Priority</th>
-                <th>Change Priority</th>
-                <th>Meeting Date</th>
-                <th>Meeting Address</th>
-                <th>Meeting Summary</th>
-                <th>Change Meeting</th>
-                <!-- <th>Meeting Address</th> -->
-                <!-- look to replace the buttons with a datalist tag -->
-            </tr>
+      <tr>
+        <th>UserName</th>
+        <th>Name</th>
+        <th>Requested Meeting</th>
+        <th>Approve?</th>
+        <!-- <th>Meeting Address</th> -->
+        <!-- look to replace the buttons with a datalist tag -->
+      </tr>
 
 
-        </thead>
-        <tbody id="complaintList">
-        </tbody>
-    </table>
+    </thead>
+    <tbody id="speakerRequests">
+    </tbody>
+  </table>
 
-    <datalist id="StatusListOptions">
-        <option value="high">
-        <option value="low">
-        <option value="resolved">
-        <option value="ignored">
-    </datalist>
+  <datalist id="requestOptions">
+    <option value="pending">
+    <option value="approved">
+    <option value="denied">
+  </datalist>
 
-    <datalist id="MeetingOptionsList"></datalist>
-    <!-- Empty datalist container. Will add assignable meetings into this container-->
-    <script type="text/javascript" src="/Scripts/complaints-script.js"></script>
+  <script type="text/javascript" src="/Scripts/approve-speaker-script.js"></script>
 </body>
+
 </html>

@@ -20,7 +20,7 @@ const usernameInput = document.getElementById("inputUserName");
 
         if (httpResponse.status === 200) {
             const user = await httpResponse.json();
-            alert("login successful");
+          //  alert("login successful");
          
             // local storage can be used to cache information
             user.password = null;

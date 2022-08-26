@@ -19,9 +19,12 @@ if (user === null) {
 }
 
 user = JSON.parse(user);
+// set everything as if logged out, and then re add things based on user
+loggedOut();
 
 // not an activated account then go to logged out state
 if (user.role === 'INACTIVE') {
+  loggedIn();
   inactiveAccount();
   return;
 }
@@ -41,11 +44,15 @@ function loggedIn() {
 }
 
 function loggedOut() {
-  localStorage.clear();
-
   loginLink.setAttribute("style", "display: inline");
   logoutLink.setAttribute("style", "display: none");
   councilPortal.setAttribute("style", "display: none");
+}
+
+function clearCache()
+{
+  localStorage.clear();
+  window.location = "main-page.html";
 }
 
 function inactiveAccount()
@@ -54,5 +61,6 @@ function inactiveAccount()
 }
 
 function loggedCouncil() {
+  console.log("loggedCouncil()");
   councilPortal.setAttribute("style", "display: inline");
 }
