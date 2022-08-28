@@ -15,6 +15,14 @@ const basicInfo = document.getElementById("basicInfo");
 const addInfo = document.getElementById("addInfo");
 const sumInfo = document.getElementById("sumInfo");
 
+const dateInput = document.getElementById("dateInput");
+const addressInput = document.getElementById("addressInput");
+const summaryInput = document.getElementById("summaryInput");
+
+let now = new Date().toISOString().slice(0, new Date().toISOString().lastIndexOf(":"));
+ dateInput.value = now;
+dateInput.min = now;
+
 
 // submit meeting button here
 document.addEventListener("submit", async event => {
@@ -39,7 +47,25 @@ if (storedUser !== null) {
 
 
 async function createMeetingButton() {
-    // create meeting
+    // create meeting if inputs valid
+    if (!dateInput.value)
+    {
+        alert("Please specify a valid date");
+       return;
+    }
+
+    if (!addressInput.value)
+    {
+        alert("Address cannot be blank");
+        return;
+    }
+
+    if (!summaryInput.value)
+    {
+        alert("Summary cannot be blank");
+        return;
+    }
+
     await createMeeting();
 
     hideForm();
@@ -98,9 +124,7 @@ function hideForm() {
 }
 
 async function createMeeting() {
-    const dateInput = document.getElementById("dateInput");
-    const addressInput = document.getElementById("addressInput");
-    const summaryInput = document.getElementById("summaryInput");
+
 
     let myDate = new Date(dateInput.value);
     console.log("my date " + myDate);
@@ -148,7 +172,16 @@ async function getAllMeetings() {
 
             const date = document.createElement("td");
             epochDate = new Date(meeting.scheduledDate * 1000);
-            date.innerText = epochDate.toLocaleString();
+
+            date.innerText = roundDate(epochDate.toLocaleString());
+            // let dateString = epochDate.toLocaleString();
+            // // drop the seconds but keep the am/pm suffix
+            // let amOrPM = dateString.substring(dateString.length - 3);
+            // dateString = dateString.substring(0, dateString.length - 6) + amOrPM;
+
+
+
+            // date.innerText = dateString;
 
             const address = document.createElement("td");
             address.innerText = meeting.address;
@@ -178,6 +211,15 @@ async function getAllMeetings() {
     }
 }
 
+function roundDate(date)
+{
+    let dateString = date;
+    // drop the seconds but keep the am/pm suffix
+    let amOrPM = dateString.substring(dateString.length - 3);
+    dateString = dateString.substring(0, dateString.length - 6) + amOrPM;
+    return dateString;
+}
+
 async function viewMeeting(meetingID) {
     console.log("viewing meeting " + meetingID);
 
@@ -204,7 +246,7 @@ async function viewMeeting(meetingID) {
         const complaints = document.createElement("td");
         const speakers = document.createElement("td");
 
-        basic.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${epochDate.toLocaleString()}\n\nSummary\n ${meeting.summary}`;
+        basic.innerText = `Where:\n${meeting.address}\n\nWhen:\n ${roundDate(epochDate.toLocaleString())}\n\nSummary\n ${meeting.summary}`;
 
         // attached complaints
         let complaintList = await getComplaintsByMeeting(meetingID);

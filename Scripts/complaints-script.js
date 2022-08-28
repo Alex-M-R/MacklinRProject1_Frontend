@@ -108,7 +108,6 @@ const complaintTable = document.getElementById("complaintTable");
                 const status = document.createElement("td");
                 status.innerText = complaint.status;
 
-                //const statusChangeDropdown = document.createElement("dropdown");  // use dropdown someday instead of buttons if I can get it to work
                 const btns = document.createElement("td");
 
                 const aMeetingDate = document.createElement("td");
@@ -130,6 +129,7 @@ const complaintTable = document.getElementById("complaintTable");
 
                 const setStatusInput = document.createElement("input");
                 setStatusInput.setAttribute('list', 'StatusListOptions');
+                setStatusInput.placeholder = complaint.status;
                 setStatusInput.dataset.id = complaint.id;
 
                 setStatusInput.addEventListener('change', async event => {
@@ -140,6 +140,7 @@ const complaintTable = document.getElementById("complaintTable");
 
                 const setMeetingInput = document.createElement("input");
                 setMeetingInput.setAttribute('list', 'MeetingOptionsList');
+                setMeetingInput.placeholder = meeting.summary;
 
                 setMeetingInput.dataset.id = complaint.id;
                 setMeetingInput.addEventListener('change', async event => {
@@ -150,17 +151,18 @@ const complaintTable = document.getElementById("complaintTable");
 
 
                 changeStatusTD.appendChild(setStatusInput);
+                changeMeetingTD.appendChild(setMeetingInput);
 
                 complaintRow.appendChild(description);
-                complaintRow.appendChild(status);
+                // complaintRow.appendChild(status);
 
                 complaintRow.appendChild(changeStatusTD);
 
                 complaintRow.appendChild(aMeetingDate);
+            
+                // complaintRow.appendChild(meetingSummary);
+                complaintRow.appendChild(changeMeetingTD);
                 complaintRow.appendChild(aMeetingAddress);
-                complaintRow.appendChild(meetingSummary);
-                complaintRow.appendChild(setMeetingInput);
-
                 complaintList.appendChild(complaintRow);
             }
         }
