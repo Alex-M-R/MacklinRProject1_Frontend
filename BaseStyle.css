@@ -1,10 +1,10 @@
         .header {
-            background: url('/images/hero-summer.jpg');
+            background: url('/images/S3e7_Citadel_reconstruction.png');
             background-repeat: no-repeat;
             padding: 60px;
             text-align: center;
-            /* background: #1abc9c;  */
             color: white;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
             font-size: 30px;
         }
 
